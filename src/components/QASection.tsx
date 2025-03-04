@@ -64,7 +64,7 @@ const QASection: React.FC = () => {
       ],
     },
     {
-      id:, 6,
+      id: 6,
       name: 'Healthcare & Life Sciences',
       categories: [
         { id: 1, name: 'Digital Health', content: 'Accelerate your digital health initiatives with our comprehensive consulting services. We help healthcare organizations implement telehealth solutions, patient engagement platforms, and integrated health information systems to improve care delivery and patient outcomes.' },
