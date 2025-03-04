@@ -61,21 +61,6 @@ const Index = () => {
       </main>
       
       <Footer />
-      
-      <style>
-        {`
-        .reveal {
-          opacity: 0;
-          transform: translateY(30px);
-          transition: opacity 0.6s ease, transform 0.8s ease;
-        }
-        
-        .reveal.active {
-          opacity: 1;
-          transform: translateY(0);
-        }
-        `}
-      </style>
     </div>
   );
 };

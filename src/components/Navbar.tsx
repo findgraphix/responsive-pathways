@@ -18,6 +18,8 @@ const Navbar: React.FC = () => {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+    // Toggle body scroll when menu is open
+    document.body.style.overflow = !isMenuOpen ? 'hidden' : '';
   };
 
   const toggleSearch = () => {
@@ -98,19 +100,19 @@ const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Menu Backdrop with Blur */}
-      <div
+      {/* Main content blur overlay when menu is open */}
+      <div 
         className={`fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${
-          isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          isMenuOpen ? 'opacity-100 z-40' : 'opacity-0 pointer-events-none -z-10'
         }`}
         onClick={toggleMenu}
       ></div>
       
-      {/* Mobile Menu Slide-out */}
+      {/* Mobile Menu Slide-out with blurry light grey background */}
       <div
-        className={`fixed top-0 left-0 h-full w-3/4 max-w-xs bg-white shadow-xl transition-transform duration-300 ease-in-out transform rounded-br-[20px] ${
+        className={`fixed top-0 left-0 h-full w-3/4 max-w-xs bg-light-gray/80 backdrop-blur-md shadow-xl transition-transform duration-300 ease-in-out transform rounded-br-[20px] ${
           isMenuOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+        } z-50`}
       >
         <div className="p-6 h-full flex flex-col">
           <div className="flex justify-center items-center mb-8">
