@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -62,6 +61,7 @@ export default {
 			},
 			fontFamily: {
 				'impact': ['Impact', 'sans-serif'],
+				'rubik': ['Rubik', 'sans-serif'],
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -132,7 +132,10 @@ export default {
 				'scale-up': 'scale-up 1s ease-in-out infinite',
 				'slide-left': 'slide-left 15s linear infinite',
 				'slide-right': 'slide-right 0.5s ease-out',
-			}
+			},
+			letterSpacing: {
+				wide: '1px',
+			},
 		}
 	},
 	plugins: [require("tailwindcss-animate")],

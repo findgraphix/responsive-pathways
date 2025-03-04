@@ -70,7 +70,7 @@ const Navbar: React.FC = () => {
 
             {/* Logo */}
             <a href="#" className="flex items-center">
-              <span className="text-lg md:text-2xl font-impact tracking-wider text-black">COMPANY</span>
+              <span className="text-lg md:text-2xl font-rubik tracking-wider text-black">COMPANY</span>
             </a>
           </div>
 
@@ -80,7 +80,7 @@ const Navbar: React.FC = () => {
               <a
                 key={item.id}
                 href={item.href}
-                className="text-black hover:text-sky-blue transition-all-fast text-shadow"
+                className="text-black hover:text-sky-blue transition-all-fast text-shadow tracking-wide font-rubik"
               >
                 {item.name}
               </a>
@@ -98,7 +98,7 @@ const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Menu Slide-out */}
+      {/* Mobile Menu Backdrop with Blur */}
       <div
         className={`fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${
           isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
@@ -106,21 +106,22 @@ const Navbar: React.FC = () => {
         onClick={toggleMenu}
       ></div>
       
+      {/* Mobile Menu Slide-out */}
       <div
         className={`fixed top-0 left-0 h-full w-3/4 max-w-xs bg-white shadow-xl transition-transform duration-300 ease-in-out transform rounded-br-[20px] ${
           isMenuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="p-6 h-full flex flex-col">
-          <div className="flex justify-between items-center mb-8">
-            <span className="text-xl font-impact tracking-wider text-black">MENU</span>
+          <div className="flex justify-center items-center mb-8">
+            <span className="text-xl font-rubik tracking-wider text-black">COMPANY</span>
           </div>
           <nav className="flex flex-col space-y-6">
             {menuItems.map((item) => (
               <a
                 key={item.id}
                 href={item.href}
-                className="text-black hover:text-sky-blue transition-all-fast py-2 border-b border-light-gray/30"
+                className="text-black hover:text-sky-blue transition-all-fast py-2 border-b border-light-gray/30 font-rubik tracking-wide"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.name}
@@ -149,7 +150,7 @@ const Navbar: React.FC = () => {
               id="searchInput"
               type="text"
               placeholder="Search for services, industries, insights..."
-              className="w-full pl-10 pr-4 py-3 rounded-md bg-light-gray/30 focus:outline-none focus:ring-2 focus:ring-sky-blue"
+              className="w-full pl-10 pr-4 py-3 rounded-md bg-light-gray/30 focus:outline-none focus:ring-2 focus:ring-sky-blue font-rubik tracking-wide"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />

@@ -56,7 +56,7 @@
   }
 
   body {
-    @apply bg-background text-foreground font-impact antialiased overflow-x-hidden;
+    @apply bg-background text-foreground font-rubik tracking-wide antialiased overflow-x-hidden;
   }
 
   html {
@@ -65,11 +65,11 @@
 }
 
 @font-face {
-  font-family: 'Impact';
-  src: url('https://fonts.gstatic.com/s/impact/v18/OPd2VxQGcQaKOuOx3xEOspA.woff2') format('woff2');
-  font-weight: normal;
+  font-family: 'Rubik';
   font-style: normal;
+  font-weight: 400;
   font-display: swap;
+  src: url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap');
 }
 
 /* Custom Utilities */

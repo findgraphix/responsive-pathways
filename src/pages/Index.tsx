@@ -49,7 +49,7 @@ const Index = () => {
   }, []);
   
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen font-rubik tracking-wide">
       <Navbar />
       
       <main>
@@ -62,7 +62,8 @@ const Index = () => {
       
       <Footer />
       
-      <style jsx>{`
+      <style>
+        {`
         .reveal {
           opacity: 0;
           transform: translateY(30px);
@@ -73,7 +74,8 @@ const Index = () => {
           opacity: 1;
           transform: translateY(0);
         }
-      `}</style>
+        `}
+      </style>
     </div>
   );
 };
