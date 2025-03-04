@@ -122,21 +122,6 @@ const GrowthGraphic: React.FC = () => {
           ))}
         </div>
       </div>
-      
-      <style jsx>{`
-        .milestone.active {
-          opacity: 1;
-          transform: translateY(0);
-        }
-        
-        .milestone {
-          transform: translateY(20px);
-        }
-        
-        .timeline-line-inner.active {
-          height: 100%;
-        }
-      `}</style>
     </section>
   );
 };

@@ -115,8 +115,16 @@ const Navbar: React.FC = () => {
         } z-50`}
       >
         <div className="p-6 h-full flex flex-col">
-          <div className="flex justify-center items-center mb-8">
+          <div className="flex justify-center items-center mb-8 relative">
             <span className="text-xl font-rubik tracking-wider text-black">COMPANY</span>
+            {/* Close menu button */}
+            <button 
+              onClick={toggleMenu}
+              className="absolute right-0 top-0 p-1 hover:bg-gray-200/50 rounded-full transition-colors"
+              aria-label="Close menu"
+            >
+              <X className="w-5 h-5 text-black" />
+            </button>
           </div>
           <nav className="flex flex-col space-y-6">
             {menuItems.map((item) => (
