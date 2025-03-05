@@ -1,10 +1,12 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, TouchEvent } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const InsightsSection: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const sliderRef = useRef<HTMLDivElement>(null);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
   
   const insights = [
     {
@@ -36,9 +38,37 @@ const InsightsSection: React.FC = () => {
       image: 'https://images.unsplash.com/photo-1488229297570-58520851e868?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
     },
   ];
+
+  // Minimum swipe distance threshold
+  const minSwipeDistance = 50;
+  
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+  
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+  
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    
+    if (isLeftSwipe) {
+      nextSlide();
+    }
+    
+    if (isRightSwipe) {
+      prevSlide();
+    }
+  };
   
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % (insights.length - 1));
+    setCurrentSlide((prev) => (prev === insights.length - 2 ? 0 : prev + 1));
   };
   
   const prevSlide = () => {
@@ -47,9 +77,28 @@ const InsightsSection: React.FC = () => {
   
   useEffect(() => {
     if (sliderRef.current) {
-      sliderRef.current.style.transform = `translateX(-${currentSlide * 100}%)`;
+      sliderRef.current.style.transform = `translateX(-${currentSlide * (100/insights.length)}%)`;
     }
-  }, [currentSlide]);
+  }, [currentSlide, insights.length]);
+  
+  // Make the slider show only two cards at a time on mobile
+  const getItemWidth = () => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < 768 ? 100 : 50; // 100% on mobile, 50% on desktop
+    }
+    return 50;
+  };
+  
+  const [itemWidth, setItemWidth] = useState(getItemWidth());
+  
+  useEffect(() => {
+    const handleResize = () => {
+      setItemWidth(getItemWidth());
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
   return (
     <section className="py-20 px-6 bg-white">
@@ -81,19 +130,22 @@ const InsightsSection: React.FC = () => {
           </div>
         </div>
         
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-hidden"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           <div 
             ref={sliderRef}
             className="flex transition-transform duration-500 ease-out"
-            style={{ width: `${insights.length * 100}%` }}
           >
             {insights.map((insight) => (
               <div 
                 key={insight.id} 
-                className="w-full md:w-1/2 px-4"
-                style={{ flex: `0 0 ${100 / insights.length}%` }}
+                className="px-4"
+                style={{ flex: `0 0 ${itemWidth}%` }}
               >
-                <div className="bg-light-gray rounded-lg overflow-hidden group">
+                <div className="bg-light-gray rounded-lg overflow-hidden group shadow-md">
                   <div className="relative h-60 overflow-hidden">
                     <img
                       src={insight.image}
@@ -120,6 +172,20 @@ const InsightsSection: React.FC = () => {
               </div>
             ))}
           </div>
+        </div>
+        
+        {/* Slide indicator dots */}
+        <div className="flex justify-center mt-6 space-x-2">
+          {Array.from({ length: insights.length - 1 }).map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`w-2 h-2 rounded-full transition-all ${
+                index === currentSlide ? 'bg-sky-blue w-6' : 'bg-black/30'
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
         </div>
         
         <div className="mt-10 text-center">

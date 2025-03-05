@@ -1,8 +1,11 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const HeroSlider: React.FC = () => {
   const [activeSlide, setActiveSlide] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const sliderRef = useRef<HTMLDivElement>(null);
   
   const slides = [
     {
@@ -37,6 +40,79 @@ const HeroSlider: React.FC = () => {
     },
   ];
   
+  // Minimum swipe distance threshold
+  const minSwipeDistance = 50;
+  
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+  
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+  
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    
+    if (isLeftSwipe) {
+      // Next slide
+      setActiveSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    }
+    
+    if (isRightSwipe) {
+      // Previous slide
+      setActiveSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+    }
+  };
+
+  // Mouse swipe functionality
+  const [mouseDown, setMouseDown] = useState(false);
+  const [mouseStart, setMouseStart] = useState<number | null>(null);
+  const [mouseEnd, setMouseEnd] = useState<number | null>(null);
+  
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setMouseDown(true);
+    setMouseStart(e.clientX);
+    setMouseEnd(null);
+  };
+  
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!mouseDown) return;
+    setMouseEnd(e.clientX);
+  };
+  
+  const handleMouseUp = () => {
+    if (!mouseDown || !mouseStart || !mouseEnd) {
+      setMouseDown(false);
+      return;
+    }
+    
+    const distance = mouseStart - mouseEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    
+    if (isLeftSwipe) {
+      // Next slide
+      setActiveSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    }
+    
+    if (isRightSwipe) {
+      // Previous slide
+      setActiveSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+    }
+    
+    setMouseDown(false);
+  };
+  
+  const handleMouseLeave = () => {
+    setMouseDown(false);
+  };
+  
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveSlide((prevSlide) => (prevSlide + 1) % slides.length);
@@ -50,7 +126,17 @@ const HeroSlider: React.FC = () => {
   };
   
   return (
-    <section className="relative w-full h-screen overflow-hidden mt-16">
+    <section 
+      className="relative w-full h-screen overflow-hidden mt-16 cursor-grab"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseLeave}
+      ref={sliderRef}
+    >
       {slides.map((slide, index) => (
         <div
           key={slide.id}
@@ -63,6 +149,7 @@ const HeroSlider: React.FC = () => {
             src={slide.image}
             alt={slide.title}
             className="w-full h-full object-cover"
+            draggable="false"
           />
           <div className="absolute inset-0 z-20 flex flex-col justify-center px-6 md:px-16 lg:px-24">
             <div className="w-full max-w-md">
@@ -102,6 +189,11 @@ const HeroSlider: React.FC = () => {
             />
           ))}
         </div>
+      </div>
+      
+      {/* Visual indicator for swipe */}
+      <div className="hidden md:flex absolute top-1/2 left-4 transform -translate-y-1/2 z-30 opacity-50 text-white text-xs">
+        Swipe or drag
       </div>
     </section>
   );

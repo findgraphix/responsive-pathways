@@ -102,21 +102,21 @@ const Navbar: React.FC = () => {
 
       {/* Main content blur overlay when menu is open */}
       <div 
-        className={`fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity duration-300 ${
           isMenuOpen ? 'opacity-100 z-40' : 'opacity-0 pointer-events-none -z-10'
         }`}
         onClick={toggleMenu}
       ></div>
       
-      {/* Mobile Menu Slide-out with blurry light grey background */}
+      {/* Mobile Menu Slide-out with improved visibility */}
       <div
-        className={`fixed top-0 left-0 h-full w-3/4 max-w-xs bg-light-gray/80 backdrop-blur-md shadow-xl transition-transform duration-300 ease-in-out transform rounded-br-[20px] ${
+        className={`fixed top-0 left-0 h-full w-3/4 max-w-xs bg-white shadow-xl transition-transform duration-300 ease-in-out transform rounded-br-[20px] ${
           isMenuOpen ? 'translate-x-0' : '-translate-x-full'
         } z-50`}
       >
         <div className="p-6 h-full flex flex-col">
           <div className="flex justify-center items-center mb-8 relative">
-            <span className="text-xl font-rubik tracking-wider text-black">COMPANY</span>
+            <span className="text-xl font-rubik tracking-wider text-black font-semibold">COMPANY</span>
             {/* Close menu button */}
             <button 
               onClick={toggleMenu}
@@ -131,13 +131,22 @@ const Navbar: React.FC = () => {
               <a
                 key={item.id}
                 href={item.href}
-                className="text-black hover:text-sky-blue transition-all-fast py-2 border-b border-light-gray/30 font-rubik tracking-wide"
+                className="text-black hover:text-sky-blue transition-all-fast py-2 border-b border-light-gray/30 font-rubik tracking-wide text-base font-medium"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.name}
               </a>
             ))}
           </nav>
+          {/* Additional menu footer */}
+          <div className="mt-auto pt-6">
+            <a 
+              href="#" 
+              className="inline-block px-6 py-3 bg-sky-blue text-white rounded-md text-center w-full font-medium hover:bg-black transition-colors"
+            >
+              Contact Us
+            </a>
+          </div>
         </div>
       </div>
 

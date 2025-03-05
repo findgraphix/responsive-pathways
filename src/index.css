@@ -102,3 +102,54 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Milestone animations for GrowthGraphic */
+.milestone.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.milestone {
+  transform: translateY(20px);
+}
+
+.timeline-line-inner.active {
+  height: 100%;
+}
+
+/* Icon animations */
+.icon-container {
+  transition: transform 0.5s ease-out;
+}
+
+.icon-container:hover {
+  transform: scale(1.2) rotate(5deg);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
