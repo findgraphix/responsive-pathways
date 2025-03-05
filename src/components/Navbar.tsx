@@ -51,62 +51,64 @@ const Navbar: React.FC = () => {
   }, []);
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/80 border-b border-light-gray/10">
-      <div className="container mx-auto px-4 py-3">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            {/* Hamburger Menu */}
-            <button
-              onClick={toggleMenu}
-              aria-label="Toggle menu"
-              className="p-2 mr-4 focus:outline-none relative z-50"
-            >
-              <div className={`transition-all duration-300 ${isMenuOpen ? 'rotate-90' : ''}`}>
-                {isMenuOpen ? (
-                  <X className="w-6 h-6 text-black" />
-                ) : (
-                  <Menu className="w-6 h-6 text-black" />
-                )}
-              </div>
-            </button>
-
-            {/* Logo */}
-            <a href="#" className="flex items-center">
-              <span className="text-lg md:text-2xl font-rubik tracking-wider text-black">COMPANY</span>
-            </a>
-          </div>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-6">
-            {menuItems.map((item) => (
-              <a
-                key={item.id}
-                href={item.href}
-                className="text-black hover:text-sky-blue transition-all-fast text-shadow tracking-wide font-rubik"
+    <>
+      <header className="fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/80 border-b border-light-gray/10">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center">
+              {/* Hamburger Menu */}
+              <button
+                onClick={toggleMenu}
+                aria-label="Toggle menu"
+                className="p-2 mr-4 focus:outline-none relative z-50"
               >
-                {item.name}
+                <div className={`transition-all duration-300 ${isMenuOpen ? 'rotate-90' : ''}`}>
+                  {isMenuOpen ? (
+                    <X className="w-6 h-6 text-black" />
+                  ) : (
+                    <Menu className="w-6 h-6 text-black" />
+                  )}
+                </div>
+              </button>
+
+              {/* Logo */}
+              <a href="#" className="flex items-center">
+                <span className="text-lg md:text-2xl font-rubik tracking-wider text-black">COMPANY</span>
               </a>
-            ))}
-          </nav>
+            </div>
 
-          {/* Search Button */}
-          <button
-            onClick={toggleSearch}
-            aria-label="Search"
-            className="p-2 focus:outline-none"
-          >
-            <Search className="w-5 h-5 text-black" />
-          </button>
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex space-x-6">
+              {menuItems.map((item) => (
+                <a
+                  key={item.id}
+                  href={item.href}
+                  className="text-black hover:text-sky-blue transition-all-fast text-shadow tracking-wide font-rubik"
+                >
+                  {item.name}
+                </a>
+              ))}
+            </nav>
+
+            {/* Search Button */}
+            <button
+              onClick={toggleSearch}
+              aria-label="Search"
+              className="p-2 focus:outline-none"
+            >
+              <Search className="w-5 h-5 text-black" />
+            </button>
+          </div>
         </div>
-      </div>
+      </header>
 
-      {/* Main content blur overlay when menu is open */}
-      <div 
-        className={`fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity duration-300 ${
-          isMenuOpen ? 'opacity-100 z-40' : 'opacity-0 pointer-events-none -z-10'
-        }`}
-        onClick={toggleMenu}
-      ></div>
+      {/* Full-page blur overlay when menu is open */}
+      {isMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity duration-300 opacity-100 z-40"
+          onClick={toggleMenu}
+        ></div>
+      )}
       
       {/* Mobile Menu Slide-out with improved visibility */}
       <div
@@ -184,7 +186,7 @@ const Navbar: React.FC = () => {
           </form>
         </div>
       </div>
-    </header>
+    </>
   );
 };
 
