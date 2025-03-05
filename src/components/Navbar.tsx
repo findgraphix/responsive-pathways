@@ -102,33 +102,34 @@ const Navbar: React.FC = () => {
         </div>
       </header>
 
-      {/* Full-page blur overlay when menu is open */}
+      {/* Full-page blur overlay when menu is open - Changed to 50% blur */}
       {isMenuOpen && (
         <div 
-          className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity duration-300 opacity-100 z-40"
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300 opacity-100 z-40"
           onClick={toggleMenu}
         ></div>
       )}
       
-      {/* Mobile Menu Slide-out with improved visibility */}
+      {/* Mobile Menu Slide-out with improved styling and flexible sizing */}
       <div
-        className={`fixed top-0 left-0 h-full w-3/4 max-w-xs bg-white shadow-xl transition-transform duration-300 ease-in-out transform rounded-br-[20px] ${
+        className={`fixed top-0 left-0 max-h-screen overflow-y-auto bg-white shadow-xl transition-transform duration-300 ease-in-out transform rounded-br-[20px] p-4 z-50 ${
           isMenuOpen ? 'translate-x-0' : '-translate-x-full'
-        } z-50`}
+        }`}
+        style={{ width: 'auto', minWidth: '250px', maxWidth: '85%' }}
       >
-        <div className="p-6 h-full flex flex-col">
-          <div className="flex justify-center items-center mb-8 relative">
+        <div className="p-2 flex flex-col">
+          <div className="flex justify-between items-center mb-6">
             <span className="text-xl font-rubik tracking-wider text-black font-semibold">COMPANY</span>
-            {/* Close menu button */}
+            {/* Close menu button - positioned properly */}
             <button 
               onClick={toggleMenu}
-              className="absolute right-0 top-0 p-1 hover:bg-gray-200/50 rounded-full transition-colors"
+              className="p-1 hover:bg-gray-200/50 rounded-full transition-colors"
               aria-label="Close menu"
             >
               <X className="w-5 h-5 text-black" />
             </button>
           </div>
-          <nav className="flex flex-col space-y-6">
+          <nav className="flex flex-col space-y-4">
             {menuItems.map((item) => (
               <a
                 key={item.id}
@@ -141,7 +142,7 @@ const Navbar: React.FC = () => {
             ))}
           </nav>
           {/* Additional menu footer */}
-          <div className="mt-auto pt-6">
+          <div className="mt-6 pt-2">
             <a 
               href="#" 
               className="inline-block px-6 py-3 bg-sky-blue text-white rounded-md text-center w-full font-medium hover:bg-black transition-colors"
