@@ -101,7 +101,7 @@ const InsightsSection: React.FC = () => {
   }, []);
   
   return (
-    <section className="py-20 px-6 bg-white">
+    <section className="py-20 md:px-6 px-2 bg-white">
       <div className="container mx-auto max-w-6xl">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12">
           <div>

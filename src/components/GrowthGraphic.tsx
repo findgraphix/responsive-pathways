@@ -86,7 +86,7 @@ const GrowthGraphic: React.FC = () => {
   };
   
   return (
-    <section className="py-8 px-6 bg-black text-white">
+    <section className="py-8 md:px-6 px-2 bg-black text-white">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-6">
           <span className="inline-block px-3 py-1 mb-4 text-xs font-impact tracking-wider bg-sky-blue text-white rounded">
@@ -144,7 +144,7 @@ const GrowthGraphic: React.FC = () => {
             </div>
             
             {/* Navigation Controls */}
-            <div className="flex justify-center mt-6">
+            <div className="flex justify-center mt-12">
               <div className="flex items-center gap-4">
                 <button 
                   onClick={goToNextMilestone}

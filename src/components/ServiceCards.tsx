@@ -25,7 +25,7 @@ const ServiceCards: React.FC = () => {
   ];
   
   return (
-    <section className="py-20 px-6 bg-white">
+    <section className="py-20 md:px-6 px-2 bg-white">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-16">
           <span className="inline-block px-3 py-1 mb-4 text-xs font-impact tracking-wider bg-black text-white rounded">
