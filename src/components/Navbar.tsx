@@ -102,17 +102,17 @@ const Navbar: React.FC = () => {
         </div>
       </header>
 
-      {/* Full-page blur overlay when menu is open - Changed to 50% blur */}
+      {/* Full-page blur overlay when menu is open - Changed to 30% blur for entire background */}
       {isMenuOpen && (
         <div 
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300 opacity-100 z-40"
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm transition-opacity duration-300 opacity-100 z-40"
           onClick={toggleMenu}
         ></div>
       )}
       
-      {/* Mobile Menu Slide-out with improved styling and flexible sizing */}
+      {/* Mobile Menu Slide-out with 70% blur effect */}
       <div
-        className={`fixed top-0 left-0 max-h-screen overflow-y-auto bg-white shadow-xl transition-transform duration-300 ease-in-out transform rounded-br-[20px] p-4 z-50 ${
+        className={`fixed top-0 left-0 max-h-screen overflow-y-auto bg-white/70 backdrop-blur-md shadow-xl transition-transform duration-300 ease-in-out transform rounded-br-[20px] p-4 z-50 ${
           isMenuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
         style={{ width: 'auto', minWidth: '250px', maxWidth: '85%' }}
