@@ -2,7 +2,11 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 
-const ServiceCards: React.FC = () => {
+interface ServiceCardsProps {
+  id?: string;
+}
+
+const ServiceCards: React.FC<ServiceCardsProps> = ({ id }) => {
   const services = [
     {
       id: 1,
@@ -25,7 +29,7 @@ const ServiceCards: React.FC = () => {
   ];
   
   return (
-    <section className="py-20 md:px-6 px-2 bg-white">
+    <section id={id} className="py-20 md:px-6 px-2 bg-white">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-16">
           <span className="inline-block px-3 py-1 mb-4 text-xs font-impact tracking-wider bg-black text-white rounded">

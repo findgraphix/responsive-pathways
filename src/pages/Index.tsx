@@ -15,8 +15,9 @@ const Index = () => {
       anchor.addEventListener('click', function (e) {
         e.preventDefault();
         const href = this.getAttribute('href');
-        if (href) {
-          const target = document.querySelector(href);
+        if (href && href !== '#') {
+          const targetId = href.substring(1);
+          const target = document.getElementById(targetId);
           if (target) {
             target.scrollIntoView({
               behavior: 'smooth'
@@ -54,10 +55,10 @@ const Index = () => {
       
       <main>
         <HeroSlider />
-        <QASection />
-        <ServiceCards />
-        <GrowthGraphic />
-        <InsightsSection />
+        <QASection id="consulting-services" />
+        <ServiceCards id="services" />
+        <GrowthGraphic id="digital" />
+        <InsightsSection id="insights" />
       </main>
       
       <Footer />

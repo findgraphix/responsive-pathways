@@ -2,11 +2,16 @@
 import React, { useState, useRef, useEffect, TouchEvent } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-const InsightsSection: React.FC = () => {
+interface InsightsSectionProps {
+  id?: string;
+}
+
+const InsightsSection: React.FC<InsightsSectionProps> = ({ id }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const sliderRef = useRef<HTMLDivElement>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const autoplayIntervalRef = useRef<NodeJS.Timeout | null>(null);
   
   const insights = [
     {
@@ -45,6 +50,12 @@ const InsightsSection: React.FC = () => {
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
+    
+    // Pause autoplay on touch
+    if (autoplayIntervalRef.current) {
+      clearInterval(autoplayIntervalRef.current);
+      autoplayIntervalRef.current = null;
+    }
   };
   
   const handleTouchMove = (e: React.TouchEvent) => {
@@ -65,6 +76,9 @@ const InsightsSection: React.FC = () => {
     if (isRightSwipe) {
       prevSlide();
     }
+    
+    // Resume autoplay after touch
+    startAutoplay();
   };
   
   const nextSlide = () => {
@@ -74,6 +88,31 @@ const InsightsSection: React.FC = () => {
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev === 0 ? insights.length - 2 : prev - 1));
   };
+  
+  // Start autoplay for infinite carousel
+  const startAutoplay = () => {
+    // Clear any existing interval
+    if (autoplayIntervalRef.current) {
+      clearInterval(autoplayIntervalRef.current);
+    }
+    
+    // Set new interval
+    autoplayIntervalRef.current = setInterval(() => {
+      nextSlide();
+    }, 2000);
+  };
+  
+  useEffect(() => {
+    // Start autoplay when component mounts
+    startAutoplay();
+    
+    // Clean up interval on unmount
+    return () => {
+      if (autoplayIntervalRef.current) {
+        clearInterval(autoplayIntervalRef.current);
+      }
+    };
+  }, []);
   
   useEffect(() => {
     if (sliderRef.current) {
@@ -101,7 +140,7 @@ const InsightsSection: React.FC = () => {
   }, []);
   
   return (
-    <section className="py-20 md:px-6 px-2 bg-white">
+    <section id={id} className="py-20 md:px-6 px-2 bg-white">
       <div className="container mx-auto max-w-6xl">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12">
           <div>
@@ -114,14 +153,22 @@ const InsightsSection: React.FC = () => {
           </div>
           <div className="flex space-x-4 mt-4 md:mt-0">
             <button
-              onClick={prevSlide}
+              onClick={() => {
+                prevSlide();
+                // Reset autoplay after manual navigation
+                startAutoplay();
+              }}
               className="p-2 rounded-full bg-light-gray hover:bg-sky-blue text-black hover:text-white transition-colors"
               aria-label="Previous slide"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
-              onClick={nextSlide}
+              onClick={() => {
+                nextSlide();
+                // Reset autoplay after manual navigation
+                startAutoplay();
+              }}
               className="p-2 rounded-full bg-light-gray hover:bg-sky-blue text-black hover:text-white transition-colors"
               aria-label="Next slide"
             >
@@ -179,7 +226,11 @@ const InsightsSection: React.FC = () => {
           {Array.from({ length: insights.length - 1 }).map((_, index) => (
             <button
               key={index}
-              onClick={() => setCurrentSlide(index)}
+              onClick={() => {
+                setCurrentSlide(index);
+                // Reset autoplay after manual navigation
+                startAutoplay();
+              }}
               className={`w-2 h-2 rounded-full transition-all ${
                 index === currentSlide ? 'bg-sky-blue w-6' : 'bg-black/30'
               }`}

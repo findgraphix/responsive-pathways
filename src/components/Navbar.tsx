@@ -9,9 +9,9 @@ const Navbar: React.FC = () => {
 
   const menuItems = [
     { id: 1, name: 'Industries', href: '#' },
-    { id: 2, name: 'Consulting Services', href: '#' },
-    { id: 3, name: 'Digital', href: '#' },
-    { id: 4, name: 'Insights', href: '#' },
+    { id: 2, name: 'Consulting Services', href: '#consulting-services' },
+    { id: 3, name: 'Digital', href: '#digital' },
+    { id: 4, name: 'Insights', href: '#insights' },
     { id: 5, name: 'About', href: '#' },
     { id: 6, name: 'Career', href: '#' },
   ];

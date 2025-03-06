@@ -1,8 +1,12 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Target, Lightbulb, Rocket, Zap, Award, ArrowRight } from 'lucide-react';
+import { Target, Lightbulb, Rocket, Zap, Award, ArrowRight, Sparkles } from 'lucide-react';
 
-const GrowthGraphic: React.FC = () => {
+interface GrowthGraphicProps {
+  id?: string;
+}
+
+const GrowthGraphic: React.FC<GrowthGraphicProps> = ({ id }) => {
   const graphRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   
@@ -40,7 +44,8 @@ const GrowthGraphic: React.FC = () => {
       year: 'Results',
       title: 'Measure Success',
       description: 'We track key performance indicators and make data-driven adjustments to ensure you achieve your desired outcomes.',
-      icon: <Award className="w-10 h-10 text-sky-blue" />
+      icon: <Award className="w-10 h-10 text-amber-400" />,
+      isSpecial: true
     },
   ];
   
@@ -86,7 +91,7 @@ const GrowthGraphic: React.FC = () => {
   };
   
   return (
-    <section className="py-8 md:px-6 px-2 bg-black text-white">
+    <section id={id} className="py-8 md:px-6 px-2 bg-black text-white">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-6">
           <span className="inline-block px-3 py-1 mb-4 text-xs font-impact tracking-wider bg-sky-blue text-white rounded">
@@ -103,7 +108,7 @@ const GrowthGraphic: React.FC = () => {
         <div ref={graphRef} className="relative pt-5 pb-5 flex justify-center">
           <div className="w-full max-w-4xl">
             {/* Milestone Content */}
-            <div className="relative overflow-hidden" style={{ minHeight: '250px' }}>
+            <div className="relative overflow-hidden" style={{ minHeight: '300px' }}>
               {milestones.map((milestone, index) => (
                 <div
                   key={milestone.id}
@@ -116,26 +121,42 @@ const GrowthGraphic: React.FC = () => {
                   }`}
                 >
                   {/* Icon with Number */}
-                  <div className="w-16 h-16 rounded-full bg-black border-2 border-sky-blue flex items-center justify-center z-10 relative animate-pulse shrink-0">
+                  <div className={`w-16 h-16 rounded-full bg-black border-2 ${milestone.isSpecial ? 'border-amber-400' : 'border-sky-blue'} flex items-center justify-center z-10 relative animate-pulse shrink-0`}>
                     <div className="icon-container animate-fade-in">
                       {milestone.icon}
                     </div>
                   </div>
                   
                   {/* Content */}
-                  <div className="bg-black/50 backdrop-blur-sm p-6 rounded-lg border border-white/10 hover:border-sky-blue/30 transition-all flex-1">
+                  <div className={`${milestone.isSpecial ? 'bg-black/70' : 'bg-black/50'} backdrop-blur-sm p-6 rounded-lg border ${milestone.isSpecial ? 'border-amber-400/30' : 'border-white/10'} hover:border-sky-blue/30 transition-all flex-1 relative overflow-hidden`}>
+                    {milestone.isSpecial && (
+                      <div className="absolute inset-0 overflow-hidden opacity-30 pointer-events-none">
+                        <div className="absolute top-0 left-0">
+                          <Sparkles className="w-8 h-8 text-amber-400 animate-scale-up" />
+                        </div>
+                        <div className="absolute top-1/4 right-1/4">
+                          <Sparkles className="w-6 h-6 text-amber-400 animate-scale-up" style={{ animationDelay: '0.5s' }} />
+                        </div>
+                        <div className="absolute bottom-1/3 left-1/3">
+                          <Sparkles className="w-10 h-10 text-amber-400 animate-scale-up" style={{ animationDelay: '0.8s' }} />
+                        </div>
+                        <div className="absolute bottom-1/4 right-1/6">
+                          <Sparkles className="w-7 h-7 text-amber-400 animate-scale-up" style={{ animationDelay: '1.2s' }} />
+                        </div>
+                      </div>
+                    )}
                     <div className="flex justify-between items-center mb-2">
-                      <h4 className="text-lg font-impact text-sky-blue">
+                      <h4 className={`text-lg font-impact ${milestone.isSpecial ? 'text-amber-400' : 'text-sky-blue'}`}>
                         {milestone.year}
                       </h4>
                       <span className="text-xl font-impact text-white/50">
                         {index + 1}/{milestones.length}
                       </span>
                     </div>
-                    <h3 className="text-xl font-impact text-white mb-2">
+                    <h3 className={`text-xl font-impact ${milestone.isSpecial ? 'text-amber-400' : 'text-white'} mb-2`}>
                       {milestone.title}
                     </h3>
-                    <p className="text-white/70 text-sm">
+                    <p className="text-white/70 text-sm md:text-base">
                       {milestone.description}
                     </p>
                   </div>
@@ -154,12 +175,14 @@ const GrowthGraphic: React.FC = () => {
                 </button>
                 
                 <div className="flex gap-1">
-                  {milestones.map((_, idx) => (
+                  {milestones.map((milestone, idx) => (
                     <button
                       key={idx}
                       onClick={() => setActiveIndex(idx)}
                       className={`w-2 h-2 rounded-full transition-all ${
-                        activeIndex === idx ? 'bg-sky-blue w-6' : 'bg-white/30'
+                        activeIndex === idx 
+                          ? (milestone.isSpecial ? 'bg-amber-400 w-6' : 'bg-sky-blue w-6') 
+                          : 'bg-white/30'
                       }`}
                       aria-label={`Go to step ${idx + 1}`}
                     />

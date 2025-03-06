@@ -1,5 +1,9 @@
-
 import React, { useState } from 'react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+
+interface QASectionProps {
+  id?: string;
+}
 
 interface Category {
   id: number;
@@ -13,7 +17,7 @@ interface Industry {
   categories: Category[];
 }
 
-const QASection: React.FC = () => {
+const QASection: React.FC<QASectionProps> = ({ id }) => {
   const [selectedIndustry, setSelectedIndustry] = useState<Industry | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   
@@ -125,7 +129,7 @@ const QASection: React.FC = () => {
   };
   
   return (
-    <section className="py-20 md:px-6 px-2 bg-light-gray">
+    <section id={id} className="py-20 md:px-6 px-2 bg-light-gray">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-12">
           <span className="inline-block px-3 py-1 mb-4 text-xs font-impact tracking-wider bg-black text-white rounded">
