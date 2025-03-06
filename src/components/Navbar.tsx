@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { Search, X, Menu } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useSearch } from '../context/SearchContext';
 import SearchResults from './SearchResults';
 
@@ -12,6 +11,7 @@ const Navbar: React.FC = () => {
   const [showResults, setShowResults] = useState(false);
   const { searchResults, isSearching, performSearch, clearSearchResults } = useSearch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const menuItems = [
     { id: 1, name: 'Industries', href: '/industries' },
@@ -22,9 +22,28 @@ const Navbar: React.FC = () => {
     { id: 6, name: 'Career', href: '/career' },
   ];
 
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.substring(1);
+      const element = document.getElementById(id);
+      if (element) {
+        setTimeout(() => {
+          window.scrollTo({
+            top: element.offsetTop,
+            behavior: 'smooth'
+          });
+        }, 100);
+      }
+    } else if (location.pathname === '/' || location.pathname === '') {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+  }, [location]);
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-    // Toggle body scroll when menu is open
     document.body.style.overflow = !isMenuOpen ? 'hidden' : '';
   };
 
@@ -69,34 +88,38 @@ const Navbar: React.FC = () => {
     setSearchQuery('');
   };
 
-  // Function to handle smooth scrolling for both desktop and mobile links
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     
-    // For internal page links with hash
     if (href.startsWith('/#')) {
-      const targetId = href.substring(2); // Remove the '/#' to get the ID
-      navigate('/');  // First navigate to the home page
+      const targetId = href.substring(2);
       
-      // Wait a bit for the page to load
-      setTimeout(() => {
+      if (location.pathname === '/') {
         const target = document.getElementById(targetId);
         if (target) {
           window.scrollTo({
             top: target.offsetTop,
             behavior: 'smooth'
           });
-          
-          // Close the menu if it's open
-          if (isMenuOpen) {
-            setIsMenuOpen(false);
-            document.body.style.overflow = '';
-          }
         }
-      }, 100);
-    } 
-    // For regular page navigation
-    else {
+      } else {
+        navigate('/');
+        setTimeout(() => {
+          const target = document.getElementById(targetId);
+          if (target) {
+            window.scrollTo({
+              top: target.offsetTop,
+              behavior: 'smooth'
+            });
+          }
+        }, 100);
+      }
+      
+      if (isMenuOpen) {
+        setIsMenuOpen(false);
+        document.body.style.overflow = '';
+      }
+    } else {
       navigate(href);
       if (isMenuOpen) {
         setIsMenuOpen(false);
@@ -128,7 +151,6 @@ const Navbar: React.FC = () => {
         <div className="container mx-auto px-4 py-3">
           <div className="flex justify-between items-center">
             <div className="flex items-center">
-              {/* Hamburger Menu */}
               <button
                 onClick={toggleMenu}
                 aria-label="Toggle menu"
@@ -143,13 +165,11 @@ const Navbar: React.FC = () => {
                 </div>
               </button>
 
-              {/* Logo */}
               <Link to="/" className="flex items-center">
                 <span className="text-lg md:text-2xl font-rubik tracking-wider text-black">COMPANY</span>
               </Link>
             </div>
 
-            {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-6">
               {menuItems.map((item) => (
                 item.href.startsWith('/#') ? (
@@ -173,7 +193,6 @@ const Navbar: React.FC = () => {
               ))}
             </nav>
 
-            {/* Search Button */}
             <button
               onClick={toggleSearch}
               aria-label="Search"
@@ -185,7 +204,6 @@ const Navbar: React.FC = () => {
         </div>
       </header>
 
-      {/* Full-page blur overlay when menu is open - Changed to 30% blur for entire background */}
       {isMenuOpen && (
         <div 
           className="fixed inset-0 bg-black/30 backdrop-blur-sm transition-opacity duration-300 opacity-100 z-40"
@@ -193,7 +211,6 @@ const Navbar: React.FC = () => {
         ></div>
       )}
       
-      {/* Mobile Menu Slide-out with 70% blur effect */}
       <div
         className={`fixed top-0 left-0 max-h-screen overflow-y-auto bg-white/70 backdrop-blur-md shadow-xl transition-transform duration-300 ease-in-out transform rounded-br-[20px] p-4 z-50 ${
           isMenuOpen ? 'translate-x-0' : '-translate-x-full'
@@ -205,7 +222,6 @@ const Navbar: React.FC = () => {
             <Link to="/" onClick={() => setIsMenuOpen(false)}>
               <span className="text-xl font-rubik tracking-wider text-black font-semibold">COMPANY</span>
             </Link>
-            {/* Close menu button - positioned properly */}
             <button 
               onClick={toggleMenu}
               className="p-1 hover:bg-gray-200/50 rounded-full transition-colors"
@@ -237,7 +253,6 @@ const Navbar: React.FC = () => {
               )
             ))}
           </nav>
-          {/* Additional menu footer */}
           <div className="mt-6 pt-2">
             <a 
               href="#" 
@@ -249,7 +264,6 @@ const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Search Overlay */}
       <div
         className={`fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 z-50 ${
           isSearchOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
@@ -282,7 +296,6 @@ const Navbar: React.FC = () => {
             </button>
           </form>
           
-          {/* Search Results Modal */}
           {isSearchOpen && showResults && (
             <div 
               className="absolute top-[calc(100%+8px)] left-0 right-0 mx-4 z-50"
