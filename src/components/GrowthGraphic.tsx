@@ -9,6 +9,7 @@ interface GrowthGraphicProps {
 const GrowthGraphic: React.FC<GrowthGraphicProps> = ({ id }) => {
   const graphRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState<boolean>(true);
   
   const milestones = [
     {
@@ -58,19 +59,9 @@ const GrowthGraphic: React.FC<GrowthGraphicProps> = ({ id }) => {
       const isVisible = graphPosition.top < window.innerHeight && graphPosition.bottom > 0;
       
       if (isVisible) {
-        // Start the milestone animation sequence
-        setActiveIndex(0);
-        const interval = setInterval(() => {
-          setActiveIndex(prev => {
-            if (prev >= milestones.length - 1) {
-              clearInterval(interval);
-              return prev;
-            }
-            return prev + 1;
-          });
-        }, 1000);
-        
-        return () => clearInterval(interval);
+        setIsAutoPlaying(true);
+      } else {
+        setIsAutoPlaying(false);
       }
     };
     
@@ -79,19 +70,84 @@ const GrowthGraphic: React.FC<GrowthGraphicProps> = ({ id }) => {
     handleScroll();
     
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [milestones.length]);
+  }, []);
+  
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+    
+    const rotateSlides = () => {
+      setActiveIndex(prev => {
+        if (prev >= milestones.length - 1) {
+          return 0;
+        }
+        return prev + 1;
+      });
+    };
+    
+    // Set up timer for slide rotation
+    // For Results slide (index 4), pause for 3 seconds instead of 2
+    const currentDelay = activeIndex === 4 ? 3000 : 2000;
+    
+    const timer = setTimeout(rotateSlides, currentDelay);
+    
+    return () => clearTimeout(timer);
+  }, [activeIndex, isAutoPlaying, milestones.length]);
   
   const goToNextMilestone = () => {
+    setIsAutoPlaying(false); // Pause auto-rotation when manually navigating
+    
     if (activeIndex < milestones.length - 1) {
       setActiveIndex(activeIndex + 1);
     } else {
       // Loop back to beginning
       setActiveIndex(0);
     }
+    
+    // Resume auto-rotation after 5 seconds of inactivity
+    setTimeout(() => setIsAutoPlaying(true), 5000);
   };
   
   return (
-    <section id={id} className="py-8 md:px-6 px-2 bg-black text-white">
+    <section id={id} className="py-8 md:px-6 px-2 bg-black text-white relative overflow-hidden">
+      {/* Celebration animation overlay - only visible during Results slide */}
+      <div 
+        className={`absolute inset-0 pointer-events-none transition-opacity duration-500 ${
+          activeIndex === 4 ? 'opacity-100' : 'opacity-0'
+        }`}
+      >
+        <div className="celebration-container">
+          {/* Multiple animated sparkle elements */}
+          {[...Array(20)].map((_, i) => (
+            <div 
+              key={i}
+              className="absolute w-4 h-4 rounded-full bg-amber-400"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 1.5}s`,
+                animation: `celebrate 1.5s infinite ease-out`,
+                opacity: 0
+              }}
+            />
+          ))}
+          {/* Gold confetti */}
+          {[...Array(30)].map((_, i) => (
+            <div 
+              key={`confetti-${i}`}
+              className="absolute w-2 h-8 bg-amber-400"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `-5%`,
+                transform: `rotate(${Math.random() * 360}deg)`,
+                animationDelay: `${Math.random() * 2}s`,
+                animation: `confetti 4s infinite linear`,
+                opacity: 0.7
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-6">
           <span className="inline-block px-3 py-1 mb-4 text-xs font-impact tracking-wider bg-sky-blue text-white rounded">
@@ -108,7 +164,7 @@ const GrowthGraphic: React.FC<GrowthGraphicProps> = ({ id }) => {
         <div ref={graphRef} className="relative pt-5 pb-5 flex justify-center">
           <div className="w-full max-w-4xl">
             {/* Milestone Content */}
-            <div className="relative overflow-hidden" style={{ minHeight: '300px' }}>
+            <div className="relative overflow-hidden" style={{ minHeight: '350px' }}>
               {milestones.map((milestone, index) => (
                 <div
                   key={milestone.id}
@@ -128,7 +184,9 @@ const GrowthGraphic: React.FC<GrowthGraphicProps> = ({ id }) => {
                   </div>
                   
                   {/* Content */}
-                  <div className={`${milestone.isSpecial ? 'bg-black/70' : 'bg-black/50'} backdrop-blur-sm p-6 rounded-lg border ${milestone.isSpecial ? 'border-amber-400/30' : 'border-white/10'} hover:border-sky-blue/30 transition-all flex-1 relative overflow-hidden`}>
+                  <div className={`${milestone.isSpecial ? 'bg-black/70' : 'bg-black/50'} backdrop-blur-sm p-6 md:p-8 rounded-lg border ${milestone.isSpecial ? 'border-amber-400/30' : 'border-white/10'} hover:border-sky-blue/30 transition-all flex-1 relative overflow-hidden`}
+                       style={{ minHeight: '250px' }}
+                  >
                     {milestone.isSpecial && (
                       <div className="absolute inset-0 overflow-hidden opacity-30 pointer-events-none">
                         <div className="absolute top-0 left-0">
@@ -153,7 +211,7 @@ const GrowthGraphic: React.FC<GrowthGraphicProps> = ({ id }) => {
                         {index + 1}/{milestones.length}
                       </span>
                     </div>
-                    <h3 className={`text-xl font-impact ${milestone.isSpecial ? 'text-amber-400' : 'text-white'} mb-2`}>
+                    <h3 className={`text-xl font-impact ${milestone.isSpecial ? 'text-amber-400' : 'text-white'} mb-3`}>
                       {milestone.title}
                     </h3>
                     <p className="text-white/70 text-sm md:text-base">
@@ -165,11 +223,11 @@ const GrowthGraphic: React.FC<GrowthGraphicProps> = ({ id }) => {
             </div>
             
             {/* Navigation Controls */}
-            <div className="flex justify-center mt-12">
+            <div className="flex justify-center mt-8">
               <div className="flex items-center gap-4">
                 <button 
                   onClick={goToNextMilestone}
-                  className="flex items-center justify-center px-4 py-2 bg-sky-blue hover:bg-sky-blue/80 text-white rounded-full transition-all"
+                  className="flex items-center justify-center px-3 py-1.5 bg-sky-blue hover:bg-sky-blue/80 text-white rounded-full transition-all"
                 >
                   Next Step <ArrowRight className="ml-2 w-4 h-4" />
                 </button>
@@ -178,7 +236,11 @@ const GrowthGraphic: React.FC<GrowthGraphicProps> = ({ id }) => {
                   {milestones.map((milestone, idx) => (
                     <button
                       key={idx}
-                      onClick={() => setActiveIndex(idx)}
+                      onClick={() => {
+                        setActiveIndex(idx);
+                        setIsAutoPlaying(false);
+                        setTimeout(() => setIsAutoPlaying(true), 5000);
+                      }}
                       className={`w-2 h-2 rounded-full transition-all ${
                         activeIndex === idx 
                           ? (milestone.isSpecial ? 'bg-amber-400 w-6' : 'bg-sky-blue w-6') 
