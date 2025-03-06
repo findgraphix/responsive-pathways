@@ -39,6 +39,27 @@ const Navbar: React.FC = () => {
     setIsSearchOpen(false);
   };
 
+  // Function to handle smooth scrolling for both desktop and mobile links
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    if (href && href !== '#') {
+      const targetId = href.substring(1);
+      const target = document.getElementById(targetId);
+      if (target) {
+        window.scrollTo({
+          top: target.offsetTop,
+          behavior: 'smooth'
+        });
+        
+        // Close the menu if it's open
+        if (isMenuOpen) {
+          setIsMenuOpen(false);
+          document.body.style.overflow = '';
+        }
+      }
+    }
+  };
+
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -83,6 +104,7 @@ const Navbar: React.FC = () => {
                 <a
                   key={item.id}
                   href={item.href}
+                  onClick={(e) => handleSmoothScroll(e, item.href)}
                   className="text-black hover:text-sky-blue transition-all-fast text-shadow tracking-wide font-rubik"
                 >
                   {item.name}
@@ -134,8 +156,8 @@ const Navbar: React.FC = () => {
               <a
                 key={item.id}
                 href={item.href}
+                onClick={(e) => handleSmoothScroll(e, item.href)}
                 className="text-black hover:text-sky-blue transition-all-fast py-2 border-b border-light-gray/30 font-rubik tracking-wide text-base font-medium"
-                onClick={() => setIsMenuOpen(false)}
               >
                 {item.name}
               </a>

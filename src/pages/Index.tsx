@@ -10,23 +10,6 @@ import Footer from '../components/Footer';
 
 const Index = () => {
   useEffect(() => {
-    // Smooth scroll for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const href = this.getAttribute('href');
-        if (href && href !== '#') {
-          const targetId = href.substring(1);
-          const target = document.getElementById(targetId);
-          if (target) {
-            target.scrollIntoView({
-              behavior: 'smooth'
-            });
-          }
-        }
-      });
-    });
-    
     // Add reveal animations on scroll
     const revealElements = document.querySelectorAll('.reveal');
     
