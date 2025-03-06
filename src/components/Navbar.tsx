@@ -1,19 +1,25 @@
 
 import React, { useState, useEffect } from 'react';
 import { Search, X, Menu } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSearch } from '../context/SearchContext';
+import SearchResults from './SearchResults';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showResults, setShowResults] = useState(false);
+  const { searchResults, isSearching, performSearch, clearSearchResults } = useSearch();
+  const navigate = useNavigate();
 
   const menuItems = [
-    { id: 1, name: 'Industries', href: '#' },
-    { id: 2, name: 'Consulting Services', href: '#consulting-services' },
-    { id: 3, name: 'Digital', href: '#digital' },
-    { id: 4, name: 'Insights', href: '#insights' },
-    { id: 5, name: 'About', href: '#' },
-    { id: 6, name: 'Career', href: '#' },
+    { id: 1, name: 'Industries', href: '/industries' },
+    { id: 2, name: 'Consulting Services', href: '/#consulting-services' },
+    { id: 3, name: 'Digital', href: '/#digital' },
+    { id: 4, name: 'Insights', href: '/#insights' },
+    { id: 5, name: 'About', href: '/about' },
+    { id: 6, name: 'Career', href: '/career' },
   ];
 
   const toggleMenu = () => {
@@ -28,34 +34,73 @@ const Navbar: React.FC = () => {
       setTimeout(() => {
         document.getElementById('searchInput')?.focus();
       }, 100);
+    } else {
+      clearSearchResults();
+      setShowResults(false);
+      setSearchQuery('');
     }
   };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Searching for:', searchQuery);
-    // Implement search functionality here
-    setSearchQuery('');
+    if (searchQuery.trim()) {
+      performSearch(searchQuery);
+      setShowResults(true);
+    }
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    
+    if (value.trim().length > 2) {
+      performSearch(value);
+      setShowResults(true);
+    } else if (value.trim().length === 0) {
+      clearSearchResults();
+      setShowResults(false);
+    }
+  };
+
+  const closeSearchResults = () => {
+    setShowResults(false);
     setIsSearchOpen(false);
+    clearSearchResults();
+    setSearchQuery('');
   };
 
   // Function to handle smooth scrolling for both desktop and mobile links
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
-    if (href && href !== '#') {
-      const targetId = href.substring(1);
-      const target = document.getElementById(targetId);
-      if (target) {
-        window.scrollTo({
-          top: target.offsetTop,
-          behavior: 'smooth'
-        });
-        
-        // Close the menu if it's open
-        if (isMenuOpen) {
-          setIsMenuOpen(false);
-          document.body.style.overflow = '';
+    
+    // For internal page links with hash
+    if (href.startsWith('/#')) {
+      const targetId = href.substring(2); // Remove the '/#' to get the ID
+      navigate('/');  // First navigate to the home page
+      
+      // Wait a bit for the page to load
+      setTimeout(() => {
+        const target = document.getElementById(targetId);
+        if (target) {
+          window.scrollTo({
+            top: target.offsetTop,
+            behavior: 'smooth'
+          });
+          
+          // Close the menu if it's open
+          if (isMenuOpen) {
+            setIsMenuOpen(false);
+            document.body.style.overflow = '';
+          }
         }
+      }, 100);
+    } 
+    // For regular page navigation
+    else {
+      navigate(href);
+      if (isMenuOpen) {
+        setIsMenuOpen(false);
+        document.body.style.overflow = '';
       }
     }
   };
@@ -63,13 +108,19 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        setIsSearchOpen(false);
+        if (showResults) {
+          setShowResults(false);
+        } else if (isSearchOpen) {
+          setIsSearchOpen(false);
+          clearSearchResults();
+          setSearchQuery('');
+        }
       }
     };
 
     window.addEventListener('keydown', handleEscape);
     return () => window.removeEventListener('keydown', handleEscape);
-  }, []);
+  }, [isSearchOpen, showResults, clearSearchResults]);
 
   return (
     <>
@@ -93,22 +144,32 @@ const Navbar: React.FC = () => {
               </button>
 
               {/* Logo */}
-              <a href="#" className="flex items-center">
+              <Link to="/" className="flex items-center">
                 <span className="text-lg md:text-2xl font-rubik tracking-wider text-black">COMPANY</span>
-              </a>
+              </Link>
             </div>
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-6">
               {menuItems.map((item) => (
-                <a
-                  key={item.id}
-                  href={item.href}
-                  onClick={(e) => handleSmoothScroll(e, item.href)}
-                  className="text-black hover:text-sky-blue transition-all-fast text-shadow tracking-wide font-rubik"
-                >
-                  {item.name}
-                </a>
+                item.href.startsWith('/#') ? (
+                  <a
+                    key={item.id}
+                    href={item.href}
+                    onClick={(e) => handleSmoothScroll(e, item.href)}
+                    className="text-black hover:text-sky-blue transition-all-fast text-shadow tracking-wide font-rubik"
+                  >
+                    {item.name}
+                  </a>
+                ) : (
+                  <Link
+                    key={item.id}
+                    to={item.href}
+                    className="text-black hover:text-sky-blue transition-all-fast text-shadow tracking-wide font-rubik"
+                  >
+                    {item.name}
+                  </Link>
+                )
               ))}
             </nav>
 
@@ -141,7 +202,9 @@ const Navbar: React.FC = () => {
       >
         <div className="p-2 flex flex-col">
           <div className="flex justify-between items-center mb-6">
-            <span className="text-xl font-rubik tracking-wider text-black font-semibold">COMPANY</span>
+            <Link to="/" onClick={() => setIsMenuOpen(false)}>
+              <span className="text-xl font-rubik tracking-wider text-black font-semibold">COMPANY</span>
+            </Link>
             {/* Close menu button - positioned properly */}
             <button 
               onClick={toggleMenu}
@@ -153,14 +216,25 @@ const Navbar: React.FC = () => {
           </div>
           <nav className="flex flex-col space-y-4">
             {menuItems.map((item) => (
-              <a
-                key={item.id}
-                href={item.href}
-                onClick={(e) => handleSmoothScroll(e, item.href)}
-                className="text-black hover:text-sky-blue transition-all-fast py-2 border-b border-light-gray/30 font-rubik tracking-wide text-base font-medium"
-              >
-                {item.name}
-              </a>
+              item.href.startsWith('/#') ? (
+                <a
+                  key={item.id}
+                  href={item.href}
+                  onClick={(e) => handleSmoothScroll(e, item.href)}
+                  className="text-black hover:text-sky-blue transition-all-fast py-2 border-b border-light-gray/30 font-rubik tracking-wide text-base font-medium"
+                >
+                  {item.name}
+                </a>
+              ) : (
+                <Link
+                  key={item.id}
+                  to={item.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  className="text-black hover:text-sky-blue transition-all-fast py-2 border-b border-light-gray/30 font-rubik tracking-wide text-base font-medium"
+                >
+                  {item.name}
+                </Link>
+              )
             ))}
           </nav>
           {/* Additional menu footer */}
@@ -196,7 +270,7 @@ const Navbar: React.FC = () => {
               placeholder="Search for services, industries, insights..."
               className="w-full pl-10 pr-4 py-3 rounded-md bg-light-gray/30 focus:outline-none focus:ring-2 focus:ring-sky-blue font-rubik tracking-wide"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleSearchChange}
             />
             <Search className="absolute left-3 top-3.5 w-5 h-5 text-black/60" />
             <button
@@ -207,6 +281,20 @@ const Navbar: React.FC = () => {
               <X className="w-5 h-5 text-black/60" />
             </button>
           </form>
+          
+          {/* Search Results Modal */}
+          {isSearchOpen && showResults && (
+            <div 
+              className="absolute top-[calc(100%+8px)] left-0 right-0 mx-4 z-50"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <SearchResults 
+                results={searchResults} 
+                isLoading={isSearching} 
+                onClose={closeSearchResults}
+              />
+            </div>
+          )}
         </div>
       </div>
     </>
