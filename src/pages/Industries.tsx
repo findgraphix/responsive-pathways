@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Building2, Factory, Code, Globe, ChartPieIcon, Briefcase } from 'lucide-react';
@@ -49,6 +49,29 @@ const Industries = () => {
       examples: ["Renewable Energy", "Operational Excellence", "Regulatory Strategy"]
     }
   ];
+
+  useEffect(() => {
+    // Add reveal animations on scroll
+    const revealElements = document.querySelectorAll('.reveal');
+    
+    const reveal = () => {
+      revealElements.forEach(element => {
+        const windowHeight = window.innerHeight;
+        const elementTop = element.getBoundingClientRect().top;
+        const elementVisible = 150;
+        
+        if (elementTop < windowHeight - elementVisible) {
+          element.classList.add('active');
+        }
+      });
+    };
+    
+    window.addEventListener('scroll', reveal);
+    // Trigger once on load
+    reveal();
+    
+    return () => window.removeEventListener('scroll', reveal);
+  }, []);
 
   return (
     <div className="min-h-screen font-rubik tracking-wide">

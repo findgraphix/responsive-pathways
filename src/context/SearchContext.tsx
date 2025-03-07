@@ -1,7 +1,6 @@
 
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-// Define the SearchResult type that's needed in SearchResults component
 export interface SearchResult {
   id: string;
   title: string;
@@ -11,75 +10,77 @@ export interface SearchResult {
 }
 
 interface SearchContextProps {
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
-  showResults: boolean;
-  setShowResults: (show: boolean) => void;
-  searching: boolean;
-  setSearching: (isSearching: boolean) => void;
-  // Add the missing properties from the error messages
   searchResults: SearchResult[];
   isSearching: boolean;
-  performSearch: (query: string) => void;
+  performSearch: (query: string) => Promise<void>;
   clearSearchResults: () => void;
 }
 
 const SearchContext = createContext<SearchContextProps | undefined>(undefined);
 
-export const SearchProvider = ({ children }: { children: ReactNode }) => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [showResults, setShowResults] = useState(false);
-  const [searching, setSearching] = useState(false);
+export const useSearch = () => {
+  const context = useContext(SearchContext);
+  if (!context) {
+    throw new Error('useSearch must be used within a SearchProvider');
+  }
+  return context;
+};
+
+interface SearchProviderProps {
+  children: ReactNode;
+}
+
+export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
 
-  // Implement the search functionality
-  const performSearch = (query: string) => {
-    if (!query.trim()) return;
+  const performSearch = async (query: string) => {
+    if (!query.trim()) {
+      setSearchResults([]);
+      return;
+    }
     
     setIsSearching(true);
     
-    // Simulate search with a timeout
-    setTimeout(() => {
-      // Mock search results based on the query
+    try {
+      // Simulate API call with timeout
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Mock search results
       const results: SearchResult[] = [
         {
           id: '1',
-          title: 'Digital Transformation',
-          description: 'How to transform your business with digital solutions',
-          url: '/digital',
-          category: 'Digital'
-        },
-        {
-          id: '2',
-          title: 'Industry Insights',
-          description: 'Latest trends and insights for various industries',
-          url: '/insights',
-          category: 'Insights'
-        },
-        {
-          id: '3',
-          title: 'Consulting Services Overview',
-          description: 'Our professional consulting services for your business needs',
+          title: 'Strategy Consulting',
+          description: 'Develop clear strategies to achieve your business objectives.',
           url: '/consulting-services',
           category: 'Services'
         },
         {
-          id: '4',
-          title: 'Career Opportunities',
-          description: 'Join our team and grow your career',
-          url: '/career',
-          category: 'Careers'
+          id: '2',
+          title: 'Digital Transformation',
+          description: 'Transform your business with cutting-edge digital solutions.',
+          url: '/digital',
+          category: 'Services'
+        },
+        {
+          id: '3',
+          title: 'Manufacturing Industry',
+          description: 'Solutions for manufacturing companies.',
+          url: '/industries',
+          category: 'Industries'
         }
       ].filter(item => 
         item.title.toLowerCase().includes(query.toLowerCase()) || 
-        item.description.toLowerCase().includes(query.toLowerCase()) ||
-        item.category.toLowerCase().includes(query.toLowerCase())
+        item.description.toLowerCase().includes(query.toLowerCase())
       );
       
       setSearchResults(results);
+    } catch (error) {
+      console.error('Search error:', error);
+      setSearchResults([]);
+    } finally {
       setIsSearching(false);
-    }, 500); // Simulate network delay
+    }
   };
 
   const clearSearchResults = () => {
@@ -88,26 +89,12 @@ export const SearchProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <SearchContext.Provider value={{ 
-      searchQuery, 
-      setSearchQuery, 
-      showResults, 
-      setShowResults,
-      searching,
-      setSearching,
-      searchResults,
-      isSearching,
-      performSearch,
-      clearSearchResults
+      searchResults, 
+      isSearching, 
+      performSearch, 
+      clearSearchResults 
     }}>
       {children}
     </SearchContext.Provider>
   );
-};
-
-export const useSearch = (): SearchContextProps => {
-  const context = useContext(SearchContext);
-  if (context === undefined) {
-    throw new Error('useSearch must be used within a SearchProvider');
-  }
-  return context;
 };
