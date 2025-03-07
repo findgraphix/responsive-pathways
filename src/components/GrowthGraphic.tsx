@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from 'react';
 import { Target, Lightbulb, Rocket, Zap, Award, ArrowRight, Sparkles } from 'lucide-react';
 
@@ -89,11 +90,8 @@ const GrowthGraphic: React.FC<GrowthGraphicProps> = ({ id }) => {
       });
     };
     
-    // Set up timer for slide rotation
-    // For the slide before Results (index 3), increase delay to 5 seconds
-    const currentDelay = activeIndex === 3 ? 5000 : 2000;
-    
-    const timer = setTimeout(rotateSlides, currentDelay);
+    // Set up timer for slide rotation - 2 seconds delay for all slides
+    const timer = setTimeout(rotateSlides, 2000);
     
     return () => clearTimeout(timer);
   }, [activeIndex, isAutoPlaying, milestones.length]);

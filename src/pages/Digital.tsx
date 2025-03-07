@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Code, Database, Monitor, CloudCog } from 'lucide-react';
@@ -35,6 +35,29 @@ const Digital = () => {
       features: ["Business Intelligence", "Predictive Analytics", "Data Visualization"]
     }
   ];
+
+  useEffect(() => {
+    // Add reveal animations on scroll
+    const revealElements = document.querySelectorAll('.reveal');
+    
+    const reveal = () => {
+      revealElements.forEach(element => {
+        const windowHeight = window.innerHeight;
+        const elementTop = element.getBoundingClientRect().top;
+        const elementVisible = 150;
+        
+        if (elementTop < windowHeight - elementVisible) {
+          element.classList.add('active');
+        }
+      });
+    };
+    
+    window.addEventListener('scroll', reveal);
+    // Trigger once on load
+    reveal();
+    
+    return () => window.removeEventListener('scroll', reveal);
+  }, []);
 
   return (
     <div className="min-h-screen font-rubik tracking-wide">

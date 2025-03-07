@@ -1,60 +1,63 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { Users, Medal, Goal, Clock, GraduationCap, Award } from 'lucide-react';
+import { Users, Award, Globe, Landmark } from 'lucide-react';
 
 const About = () => {
-  const teamMembers = [
-    {
-      name: "Jessica Chen",
-      title: "Chief Executive Officer",
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80",
-    },
-    {
-      name: "Michael Rodriguez",
-      title: "Chief Operating Officer",
-      image: "https://images.unsplash.com/photo-1556157382-97eda2f9e946?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80",
-    },
-    {
-      name: "Sarah Johnson",
-      title: "Chief Financial Officer",
-      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80",
-    },
-    {
-      name: "David Kim",
-      title: "Chief Technology Officer",
-      image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80",
-    }
+  const stats = [
+    { id: 1, value: '25+', label: 'Years of Experience', icon: <Landmark className="w-6 h-6 text-sky-blue" /> },
+    { id: 2, value: '500+', label: 'Clients Worldwide', icon: <Globe className="w-6 h-6 text-sky-blue" /> },
+    { id: 3, value: '150+', label: 'Expert Consultants', icon: <Users className="w-6 h-6 text-sky-blue" /> },
+    { id: 4, value: '98%', label: 'Client Satisfaction', icon: <Award className="w-6 h-6 text-sky-blue" /> },
   ];
 
-  const timelineEvents = [
+  const leadershipTeam = [
     {
-      year: "2005",
-      title: "Company Founded",
-      description: "Established with a vision to transform business consulting"
+      id: 1,
+      name: 'Jennifer Morrison',
+      role: 'CEO & Founder',
+      bio: 'With over 20 years in management consulting, Jennifer founded our firm with a vision to create impactful business transformations.',
+      image: 'https://randomuser.me/api/portraits/women/4.jpg',
     },
     {
-      year: "2010",
-      title: "International Expansion",
-      description: "Opened first international offices in Europe and Asia"
+      id: 2,
+      name: 'Michael Chang',
+      role: 'Managing Director',
+      bio: 'Michael brings extensive experience in strategy development and operational excellence across multiple industries.',
+      image: 'https://randomuser.me/api/portraits/men/32.jpg',
     },
     {
-      year: "2015",
-      title: "Digital Transformation",
-      description: "Launched specialized digital services practice"
+      id: 3,
+      name: 'Sarah Johnson',
+      role: 'Head of Digital',
+      bio: 'Sarah leads our digital practice, helping clients navigate the complex landscape of digital transformation.',
+      image: 'https://randomuser.me/api/portraits/women/68.jpg',
     },
-    {
-      year: "2020",
-      title: "Industry Recognition",
-      description: "Named among top consulting firms globally"
-    },
-    {
-      year: "Today",
-      title: "Continued Innovation",
-      description: "Leading the way in sustainable and AI-driven consulting solutions"
-    }
   ];
+
+  useEffect(() => {
+    // Add reveal animations on scroll
+    const revealElements = document.querySelectorAll('.reveal');
+    
+    const reveal = () => {
+      revealElements.forEach(element => {
+        const windowHeight = window.innerHeight;
+        const elementTop = element.getBoundingClientRect().top;
+        const elementVisible = 150;
+        
+        if (elementTop < windowHeight - elementVisible) {
+          element.classList.add('active');
+        }
+      });
+    };
+    
+    window.addEventListener('scroll', reveal);
+    // Trigger once on load
+    reveal();
+    
+    return () => window.removeEventListener('scroll', reveal);
+  }, []);
 
   return (
     <div className="min-h-screen font-rubik tracking-wide">
@@ -62,103 +65,74 @@ const About = () => {
       
       <main className="pt-24 pb-16">
         {/* Hero Section */}
-        <section className="container mx-auto px-4 mb-16 reveal">
-          <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">About Our Company</h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We're on a mission to transform businesses through innovative consulting and digital solutions.
+        <section className="bg-black text-white py-16 mb-16">
+          <div className="container mx-auto px-4 text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 reveal">About Our Firm</h1>
+            <p className="text-xl text-white/80 max-w-3xl mx-auto reveal">
+              We are a global consulting firm dedicated to helping organizations solve their most complex business challenges.
             </p>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            <div className="bg-white p-8 rounded-lg shadow-md text-center reveal">
-              <div className="flex justify-center mb-4 icon-container">
-                <Medal className="w-12 h-12 text-sky-blue" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">Our Mission</h3>
-              <p className="text-gray-600">
-                To empower organizations with strategic insights and innovative solutions that drive sustainable growth.
-              </p>
-            </div>
-            
-            <div className="bg-white p-8 rounded-lg shadow-md text-center reveal" style={{animationDelay: "0.2s"}}>
-              <div className="flex justify-center mb-4 icon-container">
-                <Goal className="w-12 h-12 text-sky-blue" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">Our Vision</h3>
-              <p className="text-gray-600">
-                To be the leading global partner for businesses navigating complex challenges and opportunities.
-              </p>
-            </div>
-            
-            <div className="bg-white p-8 rounded-lg shadow-md text-center reveal" style={{animationDelay: "0.4s"}}>
-              <div className="flex justify-center mb-4 icon-container">
-                <Award className="w-12 h-12 text-sky-blue" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">Our Values</h3>
-              <p className="text-gray-600">
-                Excellence, integrity, innovation, collaboration, and client focus guide everything we do.
+        </section>
+        
+        {/* Our Mission */}
+        <section className="container mx-auto px-4 mb-16">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12 reveal">
+              <span className="inline-block px-3 py-1 mb-4 text-xs font-impact tracking-wider bg-sky-blue text-white rounded">
+                OUR MISSION
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">Driving Business Excellence</h2>
+              <p className="text-lg text-gray-600">
+                Our mission is to partner with ambitious organizations to drive meaningful change, unlock new opportunities, and create sustainable value through innovative strategies and operational excellence.
               </p>
             </div>
           </div>
         </section>
         
-        {/* Timeline Section */}
-        <section className="bg-gray-50 py-16 mb-16 reveal">
+        {/* Stats Section */}
+        <section className="bg-light-gray py-16 mb-16">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold mb-12 text-center">Our Journey</h2>
-            
-            <div className="relative">
-              {/* Vertical line */}
-              <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-sky-blue/20"></div>
-              
-              {timelineEvents.map((event, index) => (
-                <div 
-                  key={index} 
-                  className={`relative mb-12 reveal ${index % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}
-                  style={{animationDelay: `${index * 0.2}s`}}
-                >
-                  <div className={`md:flex items-center ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
-                    <div className="md:w-1/2 mb-6 md:mb-0 md:px-8">
-                      <span className="text-sky-blue font-bold text-3xl block mb-2">{event.year}</span>
-                      <h3 className="text-xl font-bold mb-2">{event.title}</h3>
-                      <p className="text-gray-600">{event.description}</p>
-                    </div>
-                    
-                    <div className="md:w-1/2 relative">
-                      <div className="absolute left-1/2 md:left-auto md:right-1/2 transform -translate-x-1/2 md:translate-x-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-sky-blue border-4 border-white shadow-md"></div>
-                    </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {stats.map((stat) => (
+                <div key={stat.id} className="bg-white p-6 rounded-lg shadow-md text-center reveal">
+                  <div className="flex justify-center mb-4">
+                    {stat.icon}
                   </div>
+                  <h3 className="text-3xl font-bold text-black mb-2">{stat.value}</h3>
+                  <p className="text-gray-600">{stat.label}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
         
-        {/* Team Section */}
-        <section className="container mx-auto px-4 mb-16 reveal">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Our Leadership Team</h2>
+        {/* Leadership Team */}
+        <section className="container mx-auto px-4 mb-16">
+          <div className="text-center mb-12 reveal">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Leadership</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Meet the experts who guide our company's vision and strategy.
+              Meet the experienced leaders who guide our firm and inspire our consultants.
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {teamMembers.map((member, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {leadershipTeam.map((leader, index) => (
               <div 
-                key={index} 
-                className="bg-white rounded-lg shadow-md overflow-hidden text-center reveal"
+                key={leader.id} 
+                className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all-fast reveal"
                 style={{animationDelay: `${index * 0.1}s`}}
               >
-                <img 
-                  src={member.image} 
-                  alt={member.name} 
-                  className="w-full h-48 object-cover object-center"
-                />
+                <div className="h-64 overflow-hidden">
+                  <img 
+                    src={leader.image} 
+                    alt={leader.name} 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-bold mb-1">{member.name}</h3>
-                  <p className="text-sky-blue">{member.title}</p>
+                  <h3 className="text-xl font-bold mb-1">{leader.name}</h3>
+                  <p className="text-sky-blue font-medium mb-3">{leader.role}</p>
+                  <p className="text-gray-600 text-sm">{leader.bio}</p>
                 </div>
               </div>
             ))}
