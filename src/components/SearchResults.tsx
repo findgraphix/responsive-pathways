@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { SearchResult } from '../context/SearchContext';
@@ -20,7 +19,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, isLoading, onClo
     }
     groupedResults[result.category].push(result);
   });
-
+  
   const handleLinkClick = () => {
     onClose();
   };
