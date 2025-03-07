@@ -74,7 +74,7 @@ const Insights = () => {
       <main className="pt-24 pb-16">
         <section className="container mx-auto px-4 mb-16">
           <div className="text-center mb-12 reveal">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Insights</h2>
+            <h2 className="text-3xl md:text-4xl font-semibold mb-4">Our Insights</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Expert perspectives, research, and ideas to help you navigate the changing business landscape.
             </p>
@@ -100,7 +100,7 @@ const Insights = () => {
                   </div>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-bold mb-3 hover:text-sky-blue transition-colors">
+                  <h3 className="text-xl font-medium mb-3 hover:text-sky-blue transition-colors">
                     {post.title}
                   </h3>
                   <p className="text-gray-600 mb-4 text-sm">
@@ -114,7 +114,7 @@ const Insights = () => {
                       <User className="w-4 h-4 mr-1" /> {post.author}
                     </span>
                   </div>
-                  <button className="text-sky-blue font-impact hover:text-black transition-colors flex items-center">
+                  <button className="text-sky-blue font-medium hover:text-black transition-colors flex items-center">
                     Read more <ChevronRight className="ml-1 w-4 h-4" />
                   </button>
                 </div>

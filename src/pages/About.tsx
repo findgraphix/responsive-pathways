@@ -67,7 +67,7 @@ const About = () => {
         {/* Hero Section */}
         <section className="bg-black text-white py-16 mb-16">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 reveal">About Our Firm</h1>
+            <h1 className="text-4xl md:text-5xl font-semibold mb-6 reveal">About Our Firm</h1>
             <p className="text-xl text-white/80 max-w-3xl mx-auto reveal">
               We are a global consulting firm dedicated to helping organizations solve their most complex business challenges.
             </p>
@@ -78,10 +78,10 @@ const About = () => {
         <section className="container mx-auto px-4 mb-16">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12 reveal">
-              <span className="inline-block px-3 py-1 mb-4 text-xs font-impact tracking-wider bg-sky-blue text-white rounded">
+              <span className="inline-block px-3 py-1 mb-4 text-xs font-medium tracking-wider bg-sky-blue text-white rounded">
                 OUR MISSION
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">Driving Business Excellence</h2>
+              <h2 className="text-3xl md:text-4xl font-semibold mb-6">Driving Business Excellence</h2>
               <p className="text-lg text-gray-600">
                 Our mission is to partner with ambitious organizations to drive meaningful change, unlock new opportunities, and create sustainable value through innovative strategies and operational excellence.
               </p>
@@ -98,7 +98,7 @@ const About = () => {
                   <div className="flex justify-center mb-4">
                     {stat.icon}
                   </div>
-                  <h3 className="text-3xl font-bold text-black mb-2">{stat.value}</h3>
+                  <h3 className="text-3xl font-semibold text-black mb-2">{stat.value}</h3>
                   <p className="text-gray-600">{stat.label}</p>
                 </div>
               ))}
@@ -109,7 +109,7 @@ const About = () => {
         {/* Leadership Team */}
         <section className="container mx-auto px-4 mb-16">
           <div className="text-center mb-12 reveal">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Leadership</h2>
+            <h2 className="text-3xl md:text-4xl font-semibold mb-4">Our Leadership</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Meet the experienced leaders who guide our firm and inspire our consultants.
             </p>
@@ -130,7 +130,7 @@ const About = () => {
                   />
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-bold mb-1">{leader.name}</h3>
+                  <h3 className="text-xl font-medium mb-1">{leader.name}</h3>
                   <p className="text-sky-blue font-medium mb-3">{leader.role}</p>
                   <p className="text-gray-600 text-sm">{leader.bio}</p>
                 </div>

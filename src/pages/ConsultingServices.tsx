@@ -66,7 +66,7 @@ const ConsultingServices = () => {
       <main className="pt-24 pb-16">
         <section className="container mx-auto px-4 mb-16 reveal">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Consulting Services</h2>
+            <h2 className="text-3xl md:text-4xl font-semibold mb-4">Consulting Services</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               We offer comprehensive consulting services tailored to your unique business challenges.
             </p>
@@ -82,7 +82,7 @@ const ConsultingServices = () => {
                 <div className="flex justify-center mb-4 icon-container">
                   {service.icon}
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-center">{service.title}</h3>
+                <h3 className="text-xl font-medium mb-3 text-center">{service.title}</h3>
                 <p className="text-gray-600 mb-4 text-center">{service.description}</p>
                 <div className="border-t border-gray-200 pt-4 mt-auto">
                   <p className="font-medium text-sm mb-2 text-sky-blue">Key services:</p>

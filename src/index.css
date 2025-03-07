@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -18,11 +17,16 @@ body {
   /* Custom Font Classes */
   .font-impact {
     font-family: 'Impact', 'Arial Black', sans-serif;
-    font-weight: 700;
+    font-weight: 600;
   }
   
   .font-rubik {
     font-family: 'Rubik', 'Arial', sans-serif;
+  }
+
+  /* Reduce boldness of headings */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
   }
 }
 
@@ -42,6 +46,15 @@ body {
   .reveal.active {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  /* Custom title classes with reduced boldness */
+  .title-medium {
+    font-weight: 500;
+  }
+  
+  .title-semibold {
+    font-weight: 600;
   }
 }
 

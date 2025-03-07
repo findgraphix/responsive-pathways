@@ -80,7 +80,7 @@ const Industries = () => {
       <main className="pt-24 pb-16">
         <section className="container mx-auto px-4 mb-16 reveal">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Industries</h2>
+            <h2 className="text-3xl md:text-4xl font-semibold mb-4">Our Industries</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               We bring deep industry knowledge and specialized expertise to every client engagement.
             </p>
@@ -96,7 +96,7 @@ const Industries = () => {
                 <div className="flex justify-center mb-4 icon-container">
                   {industry.icon}
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-center">{industry.title}</h3>
+                <h3 className="text-xl font-medium mb-3 text-center">{industry.title}</h3>
                 <p className="text-gray-600 mb-4 text-center">{industry.description}</p>
                 <div className="border-t border-gray-200 pt-4 mt-auto">
                   <p className="font-medium text-sm mb-2 text-sky-blue">Expertise includes:</p>
