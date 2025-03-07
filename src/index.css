@@ -1,52 +1,68 @@
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    --foreground: 222.2 84% 4.9%;
+
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card-foreground: 222.2 84% 4.9%;
+
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 221 83% 53%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
+
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
+
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
+
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
+
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
+
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 221 83% 53%;
+    --ring: 222.2 84% 4.9%;
+
     --radius: 0.5rem;
   }
 
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
+
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
+
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
+
+    --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
+
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
+
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
+
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
+
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
+
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --ring: 212.7 26.8% 83.9%;
   }
 }
 
@@ -54,48 +70,21 @@
   * {
     @apply border-border;
   }
-
   body {
-    @apply bg-background text-foreground font-rubik tracking-wide antialiased overflow-x-hidden;
-  }
-
-  html {
-    scroll-behavior: smooth;
+    @apply bg-background text-foreground;
   }
 }
 
-@font-face {
-  font-family: 'Rubik';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap');
+/* Custom styles for the application */
+html {
+  scroll-behavior: smooth;
 }
 
-/* Custom Utilities */
-@layer utilities {
-  .glass-effect {
-    @apply backdrop-blur-md bg-white/10 border border-white/20;
-  }
-  
-  .text-shadow {
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-  }
-  
-  .transition-all-fast {
-    @apply transition-all duration-300 ease-in-out;
-  }
-  
-  .transition-all-slow {
-    @apply transition-all duration-500 ease-in-out;
-  }
-}
-
-/* Animation classes for page transitions */
+/* Animation styles */
 .reveal {
   opacity: 0;
   transform: translateY(30px);
-  transition: opacity 0.6s ease, transform 0.8s ease;
+  transition: all 0.8s ease;
 }
 
 .reveal.active {
@@ -103,92 +92,25 @@
   transform: translateY(0);
 }
 
-/* Milestone animations for GrowthGraphic */
-.milestone.active {
-  opacity: 1;
-  transform: translateY(0);
+.transition-all-fast {
+  transition: all 0.3s ease;
 }
 
-.milestone {
-  transform: translateY(20px);
-}
-
-.timeline-line-inner.active {
-  height: 100%;
-}
-
-/* Icon animations */
 .icon-container {
-  transition: transform 0.5s ease-out;
+  transition: transform 0.3s ease;
 }
 
-.icon-container:hover {
-  transform: scale(1.2) rotate(5deg);
+/* Colors */
+.text-sky-blue {
+  color: #0088cc; /* You can change this to your brand's sky blue */
 }
 
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
+.bg-sky-blue {
+  background-color: #0088cc; /* You can change this to your brand's sky blue */
 }
 
-.animate-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+.hover\:bg-sky-blue:hover {
+  background-color: #0088cc;
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.5s ease-in;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Celebration animations */
-@keyframes celebrate {
-  0% {
-    transform: scale(0.2);
-    opacity: 0;
-  }
-  25% {
-    opacity: 1;
-  }
-  50%, 100% {
-    transform: scale(1.5) translateY(-50px);
-    opacity: 0;
-  }
-}
-
-@keyframes confetti {
-  0% {
-    transform: translateY(-10px) rotate(0deg);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.7;
-  }
-  100% {
-    transform: translateY(1000px) rotate(720deg);
-    opacity: 0;
-  }
-}
-
-.celebration-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  pointer-events: none;
-}
+/* Add any other custom styles below */
