@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { Target, Lightbulb, Rocket, Zap, Award, ArrowRight, Sparkles } from 'lucide-react';
 
@@ -75,6 +74,12 @@ const GrowthGraphic: React.FC<GrowthGraphicProps> = ({ id }) => {
   useEffect(() => {
     if (!isAutoPlaying) return;
     
+    // If we've reached the Results slide (index 4), stop auto-rotation
+    if (activeIndex === 4) {
+      setIsAutoPlaying(false);
+      return;
+    }
+    
     const rotateSlides = () => {
       setActiveIndex(prev => {
         if (prev >= milestones.length - 1) {
@@ -85,8 +90,8 @@ const GrowthGraphic: React.FC<GrowthGraphicProps> = ({ id }) => {
     };
     
     // Set up timer for slide rotation
-    // For Results slide (index 4), pause for 3 seconds instead of 2
-    const currentDelay = activeIndex === 4 ? 3000 : 2000;
+    // For the slide before Results (index 3), increase delay to 5 seconds
+    const currentDelay = activeIndex === 3 ? 5000 : 2000;
     
     const timer = setTimeout(rotateSlides, currentDelay);
     
@@ -103,8 +108,10 @@ const GrowthGraphic: React.FC<GrowthGraphicProps> = ({ id }) => {
       setActiveIndex(0);
     }
     
-    // Resume auto-rotation after 5 seconds of inactivity
-    setTimeout(() => setIsAutoPlaying(true), 5000);
+    // Only resume auto-rotation if not on Results slide
+    if (activeIndex + 1 !== 4) {
+      setTimeout(() => setIsAutoPlaying(true), 5000);
+    }
   };
   
   return (
@@ -238,8 +245,7 @@ const GrowthGraphic: React.FC<GrowthGraphicProps> = ({ id }) => {
                       key={idx}
                       onClick={() => {
                         setActiveIndex(idx);
-                        setIsAutoPlaying(false);
-                        setTimeout(() => setIsAutoPlaying(true), 5000);
+                        setIsAutoPlaying(idx !== 4); // Only enable autoplay if not Results slide
                       }}
                       className={`w-2 h-2 rounded-full transition-all ${
                         activeIndex === idx 

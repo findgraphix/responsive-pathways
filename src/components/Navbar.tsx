@@ -15,9 +15,9 @@ const Navbar: React.FC = () => {
 
   const menuItems = [
     { id: 1, name: 'Industries', href: '/industries' },
-    { id: 2, name: 'Consulting Services', href: '/#consulting-services' },
-    { id: 3, name: 'Digital', href: '/#digital' },
-    { id: 4, name: 'Insights', href: '/#insights' },
+    { id: 2, name: 'Consulting Services', href: '/consulting-services' },
+    { id: 3, name: 'Digital', href: '/digital' },
+    { id: 4, name: 'Insights', href: '/insights' },
     { id: 5, name: 'About', href: '/about' },
     { id: 6, name: 'Career', href: '/career' },
   ];
@@ -88,43 +88,47 @@ const Navbar: React.FC = () => {
     setSearchQuery('');
   };
 
-  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleNavigation = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     
-    if (href.startsWith('/#')) {
+    if (href.startsWith('/#') && location.pathname === '/') {
       const targetId = href.substring(2);
+      const target = document.getElementById(targetId);
       
-      if (location.pathname === '/') {
-        const target = document.getElementById(targetId);
-        if (target) {
+      if (target) {
+        window.scrollTo({
+          top: target.offsetTop,
+          behavior: 'smooth'
+        });
+      }
+      
+      if (isMenuOpen) {
+        setIsMenuOpen(false);
+        document.body.style.overflow = '';
+      }
+      return;
+    }
+    
+    if (href.includes('#')) {
+      const [path, hash] = href.split('#');
+      navigate(path || '/');
+      
+      setTimeout(() => {
+        const element = document.getElementById(hash);
+        if (element) {
           window.scrollTo({
-            top: target.offsetTop,
+            top: element.offsetTop,
             behavior: 'smooth'
           });
         }
-      } else {
-        navigate('/');
-        setTimeout(() => {
-          const target = document.getElementById(targetId);
-          if (target) {
-            window.scrollTo({
-              top: target.offsetTop,
-              behavior: 'smooth'
-            });
-          }
-        }, 100);
-      }
-      
-      if (isMenuOpen) {
-        setIsMenuOpen(false);
-        document.body.style.overflow = '';
-      }
+      }, 100);
     } else {
       navigate(href);
-      if (isMenuOpen) {
-        setIsMenuOpen(false);
-        document.body.style.overflow = '';
-      }
+    }
+    
+    if (isMenuOpen) {
+      setIsMenuOpen(false);
+      document.body.style.overflow = '';
     }
   };
 
@@ -172,24 +176,14 @@ const Navbar: React.FC = () => {
 
             <nav className="hidden md:flex space-x-6">
               {menuItems.map((item) => (
-                item.href.startsWith('/#') ? (
-                  <a
-                    key={item.id}
-                    href={item.href}
-                    onClick={(e) => handleSmoothScroll(e, item.href)}
-                    className="text-black hover:text-sky-blue transition-all-fast text-shadow tracking-wide font-rubik"
-                  >
-                    {item.name}
-                  </a>
-                ) : (
-                  <Link
-                    key={item.id}
-                    to={item.href}
-                    className="text-black hover:text-sky-blue transition-all-fast text-shadow tracking-wide font-rubik"
-                  >
-                    {item.name}
-                  </Link>
-                )
+                <a
+                  key={item.id}
+                  href={item.href}
+                  onClick={(e) => handleNavigation(e, item.href)}
+                  className="text-black hover:text-sky-blue transition-all-fast text-shadow tracking-wide font-rubik"
+                >
+                  {item.name}
+                </a>
               ))}
             </nav>
 
@@ -232,25 +226,14 @@ const Navbar: React.FC = () => {
           </div>
           <nav className="flex flex-col space-y-4">
             {menuItems.map((item) => (
-              item.href.startsWith('/#') ? (
-                <a
-                  key={item.id}
-                  href={item.href}
-                  onClick={(e) => handleSmoothScroll(e, item.href)}
-                  className="text-black hover:text-sky-blue transition-all-fast py-2 border-b border-light-gray/30 font-rubik tracking-wide text-base font-medium"
-                >
-                  {item.name}
-                </a>
-              ) : (
-                <Link
-                  key={item.id}
-                  to={item.href}
-                  onClick={() => setIsMenuOpen(false)}
-                  className="text-black hover:text-sky-blue transition-all-fast py-2 border-b border-light-gray/30 font-rubik tracking-wide text-base font-medium"
-                >
-                  {item.name}
-                </Link>
-              )
+              <a
+                key={item.id}
+                href={item.href}
+                onClick={(e) => handleNavigation(e, item.href)}
+                className="text-black hover:text-sky-blue transition-all-fast py-2 border-b border-light-gray/30 font-rubik tracking-wide text-base font-medium"
+              >
+                {item.name}
+              </a>
             ))}
           </nav>
           <div className="mt-6 pt-2">
